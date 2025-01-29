@@ -10,9 +10,19 @@ running = True
 img = pygame.image.load("assets/fruit.png").convert()
 img = pygame.transform.scale(img, (50, 50))
 img2 = pygame.image.load("assets/fraise.jpg").convert()
+<<<<<<< Updated upstream
 img2 = pygame.transform.scale(img2, (50, 50))
 def create():
     movement = random.randint(-2, 2)
+=======
+img2 = pygame.transform.scale(img, (50, 50))
+
+x = random.randint(0, 600)
+y = 550
+y2 = y
+def truc():
+    movement = random.randint(-5, 5)
+>>>>>>> Stashed changes
     limit = random.randint(-100, 350)
     x = random.randint(0, 600)
     y = 550
