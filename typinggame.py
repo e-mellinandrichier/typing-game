@@ -20,16 +20,16 @@ menu_font = pygame.font.Font(None, 74)
 button_font = pygame.font.Font(None, 50)
 
 fruits_images = [
-    pygame.image.load("pictures/strawberry.jpg"),
-    pygame.image.load("pictures/strawberry.jpg"),
-    pygame.image.load("pictures/banana.jpg"),
-    pygame.image.load("pictures/banana.jpg"),
-    pygame.image.load("pictures/cherry.jpg"),
-    pygame.image.load("pictures/cherry.jpg"),
-    pygame.image.load("pictures/orange.jpg"),
-    pygame.image.load("pictures/orange.jpg"),
-    pygame.image.load("pictures/glaçon.jpg"),
-    pygame.image.load("pictures/bomb.png")
+    pygame.image.load("pictures/Strawberry.png"),
+    pygame.image.load("pictures/Strawberry.png"),
+    pygame.image.load("pictures/Banana.png"),
+    pygame.image.load("pictures/Banana.png"),
+    pygame.image.load("pictures/Cherry.png"),
+    pygame.image.load("pictures/Cherry.png"),
+    pygame.image.load("pictures/Orange.png"),
+    pygame.image.load("pictures/Orange.png"),
+    pygame.image.load("pictures/Icecube.png"),
+    pygame.image.load("pictures/Bomb.png")
 ]
 
 fruit_images = [pygame.transform.scale(img, (60, 60)) for img in fruits_images]
@@ -190,7 +190,6 @@ def game_loop():
                         print(score)
                         combo_times.append(slice_time)
 
-        # Update and draw fruits
         for fruit in fruits: 
             fruit.update()
             fruit.draw(screen)
