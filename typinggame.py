@@ -57,7 +57,7 @@ class Fruit:
     def draw(self, screen):
         screen.blit(self.image, (self.x, self.y))
         text = font.render(self.letter, True, BLACK)
-        screen.blit(text, (self.x + 20, self.y + 15))
+        screen.blit(text, (self.x + 20, self.y -30))
 
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, True, color)
@@ -98,6 +98,21 @@ def main_menu():
                     return
 
         pygame.display.update()
+
+def lost():
+    while True:
+        screen.fill(WHITE)
+        mx, my = pygame.mouse.get_pos()
+        btn_retry = pygame.Rect(WIDTH/2 - 100, 200, 200, 50)
+        draw_text('YOU HAVE LOST', menu_font, RED, screen, WIDTH/2, 100)
+        pygame.draw.rect(screen, GREEN, btn_retry)
+        draw_text('Retry', button_font, BLACK, screen, WIDTH/2, 225)
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if btn_retry.collidepoint((mx, my)):
+                    main_menu()
+        pygame.display.update()
+    
 
 def show_scores():
     if not os.path.exists(SCORE_FILE):
@@ -181,6 +196,8 @@ def game_loop():
                             time.sleep(freeze)
                         if fruit.image == fruit_images[-1]:
                             running = False
+                            
+                            lost()
                         
                         slice_time = time.time()
                         valid_combo = [t for t in combo_times if slice_time - t <= COMBO_WINDOW]
@@ -201,6 +218,7 @@ def game_loop():
                     lives -= 1
                 if lives == 0:
                     running = False
+                    lost()
 
         pygame.display.flip()
         clock.tick(30)
