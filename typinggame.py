@@ -1,12 +1,13 @@
 import pygame
 import random
+import time
 import os
 
 pygame.init()
 
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Fruit Slice Game")
+pygame.display.set_caption ("Fruits Slicer")
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -19,10 +20,17 @@ button_font = pygame.font.Font(None, 50)
 
 # Load fruit images
 fruits_images = [
+    pygame.image.load("pictures/fraise.jpg"),
+    pygame.image.load("pictures/fraise.jpg"),
+    pygame.image.load("pictures/banana.jpg"),
     pygame.image.load("pictures/strawberry.jpg"),
     pygame.image.load("pictures/banana.jpg"),
     pygame.image.load("pictures/cherry.jpg"),
-    pygame.image.load("pictures/orange.jpg")
+    pygame.image.load("pictures/cherry.jpg"),
+    pygame.image.load("pictures/orange.jpg"),
+    pygame.image.load("pictures/orange.jpg"),
+    pygame.image.load("pictures/glaçon.jpg"),
+    pygame.image.load("pictures/bomb.png")
 ]
 
 fruit_images = [pygame.transform.scale(img, (60, 60)) for img in fruits_images]
@@ -34,35 +42,77 @@ class Fruit:
     def __init__(self):
         self.image = random.choice(fruit_images)
         self.letter = random.choice(LETTERS)
-        self.x = random.randint(50, WIDTH - 50)
-        self.y = -50
-        self.speed = random.randint(3, 6)
+        self.x = random.randint(0, 600)
+        self.y = 550
+        self.speed = 10
+        self.mouv = random.randint(-3, 3)
     
     def update(self):
-        self.y += self.speed
+        self.x += self.mouv
+        self.speed -= 0.2
+        self.y -= self.speed
 
     def draw(self, screen):
         screen.blit(self.image, (self.x, self.y))
         text = font.render(self.letter, True, BLACK)
         screen.blit(text, (self.x + 20, self.y + 15))
 
+fruits = [Fruit() for _ in range(2)]
+score = 0
+lives = 3
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, True, color)
     textrect = textobj.get_rect()
     textrect.center = (x, y)
     surface.blit(textobj, textrect)
 
+
 def main_menu():
     while True:
         screen.fill(WHITE)
         draw_text('Fruit Slicer', menu_font, BLACK, screen, WIDTH/2, 100)
 
+
+while running : 
+    screen.fill(WHITE)
+    score_text = score_font.render(f"Score : {score}", True, BLACK)
+    lives_text = score_font.render(f"Lives : {lives}", True, BLACK)
+    ice_text = score_font.render("Ice", True, RED)
+    screen.blit(score_text, (10,10))
+    screen.blit(lives_text, (10,40))
         mx, my = pygame.mouse.get_pos()
 
         btn_play = pygame.Rect(WIDTH/2 - 100, 200, 200, 50)
         btn_scores = pygame.Rect(WIDTH/2 - 100, 300, 200, 50)
         btn_quit = pygame.Rect(WIDTH/2 - 100, 400, 200, 50)
         
+
+        elif event.type == pygame.KEYDOWN:
+            key_pressed = event.unicode.upper()
+            for fruit in fruits :
+                if fruit.letter == key_pressed :
+                    fruits.remove(fruit)
+                    fruits.append(Fruit())
+                    if fruit.image == fruit_images[-2]:
+                        screen.blit(ice_text, (40,100))
+                        time.sleep(2)
+                        pygame.display.flip()
+                    if fruit.image == fruit_images[-1]:
+                        running = False
+                    score += 1
+                    break
+
+    for fruit in fruits : 
+        fruit.update()
+        fruit.draw(screen)
+
+        if fruit.y > HEIGHT:
+            fruits.remove(fruit)
+            fruits.append(Fruit())
+            if fruit.image != fruit_images[-1]:
+                lives -= 1
+        if lives == 0:
+            running = False
         pygame.draw.rect(screen, GREEN, btn_play)
         pygame.draw.rect(screen, GREEN, btn_scores)
         pygame.draw.rect(screen, GREEN, btn_quit)
@@ -92,6 +142,7 @@ def show_scores():
     
     with open(SCORE_FILE, 'r') as f:
         scores = [line.strip() for line in f.readlines() if line.strip().isdigit()]
+
     
     scores = sorted([int(s) for s in scores], reverse=True)[:10]
 
